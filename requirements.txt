@@ -1,0 +1,6 @@
+pyqt6
+PySide6
+keyboard
+colorama
+pynput
+pywin32
