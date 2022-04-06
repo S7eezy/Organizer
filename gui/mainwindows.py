@@ -68,7 +68,7 @@ class Ui_MainWindow(object):
         self.gifmovie = QMovie("gui/assets/gif.gif")
         self.logo = QLabel(self.centralwidget)
         self.logo.setObjectName(u"logo")
-        self.logo.setGeometry(QRect(120, 320, 250, 60))
+        self.logo.setGeometry(QRect(20, 20, 250, 60))
         self.logo.setPixmap(QPixmap("gui/assets/logomain.png"))
         self.gifmovie = QMovie("gui/assets/gif.gif")
         self.img_gif.setMovie(self.gifmovie)
