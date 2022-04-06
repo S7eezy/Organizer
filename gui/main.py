@@ -207,15 +207,8 @@ class MainWindow(QMainWindow):
     def __HandleCfgAutoDetect(self):
         self.__ResetView()
         Windows = self.Organizer.GetActiveWindowsFiltered()
-        self.CharIndex = 0
-        self.__HandleTextBrowser("Blue", self.__TimedLog("Détection des fenêtres ouvertes..."))
-        for char in Windows:
-            self.__HandleTextBrowser("Grey", self.__TimedLog(str(char)))
-            if char not in self.Organizer.Characters:
-                self.Organizer.Characters.append(char)
-        for char in self.Organizer.Characters:
-            if char not in Windows:
-                self.Organizer.Characters.pop(char)
+        self.__HandleTextBrowser("Blue", self.__TimedLog(f"Auto-Detect : {Windows}"))
+        self.Organizer.Characters = Windows
         self.__CreateChar()
 
     ##################################################
