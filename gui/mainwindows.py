@@ -90,7 +90,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
         self.ui_label_massclick.setText(QCoreApplication.translate("MainWindow", u"Mass Click", None))
-        self.ui_label_massdclick.setText(QCoreApplication.translate("MainWindow", u"Mass Click D", None))
+        self.ui_label_massdclick.setText(QCoreApplication.translate("MainWindow", u"Mass Autopilot", None))
         self.ui_label_nextwindow.setText(QCoreApplication.translate("MainWindow", u"Pers. suivant", None))
         self.ui_label_prevwindow.setText(QCoreApplication.translate("MainWindow", u"Pers. pr\u00e9c\u00e9dent", None))
         self.ui_btn_massclick.setText(QCoreApplication.translate("MainWindow", u"...", None))

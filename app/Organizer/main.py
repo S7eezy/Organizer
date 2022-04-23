@@ -149,10 +149,11 @@ class Organizer:
             self.CurrentWindow = self.Characters[self.ProcessIndex]
             CW.switchToWindow(self.CurrentWindow)
             if action == "double_click":
-                for j in range(3):
-                    self.Mouse.position = position
-                    self.Mouse.press(Button.left)
-                    self.Mouse.release(Button.left)
+                keyboard.press("ctrl")
+                self.Mouse.position = position
+                self.Mouse.press(Button.left)
+                self.Mouse.release(Button.left)
+                keyboard.release("ctrl")
             elif action == "click":
                 self.Mouse.position = position
                 self.Mouse.press(Button.left)
