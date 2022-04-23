@@ -143,15 +143,20 @@ class Organizer:
         CW.switchToWindow(self.CurrentWindow)
 
     def __LoopIndex(self, action):
+        position = self.Mouse.position
         for i in range(len(self.Characters)):
             self.ProcessIndex = i
             self.CurrentWindow = self.Characters[self.ProcessIndex]
             CW.switchToWindow(self.CurrentWindow)
             if action == "double_click":
-                self.Mouse.click(Button.left, 3)
-                time.sleep(0.3)
+                for j in range(3):
+                    self.Mouse.position = position
+                    self.Mouse.press(Button.left)
+                    self.Mouse.release(Button.left)
             elif action == "click":
-                self.Mouse.click(Button.left)
+                self.Mouse.position = position
+                self.Mouse.press(Button.left)
+                self.Mouse.release(Button.left)
         self.__IncrementIndex()
 
     def __InputAction(self, action):
