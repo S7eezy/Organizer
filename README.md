@@ -10,6 +10,6 @@
 
 # Keybinds
 - **Mass click** : clic gauche sur toutes les fenêtres de jeu
-- **Mass click D** : double clic sur toutes les fenêtres de jeu
+- **Mass Autopilot** : ctrl + clic gauche sur toutes les fenêtres de jeu
 - **Pers. suivant** : passe à la fenêtre suivante dans l'ordre d'ini
 - **Pers. précédent** : passe à la fenêtre précédente dans l'ordre d'ini
