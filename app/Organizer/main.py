@@ -1,6 +1,7 @@
 ##################################################
 # Built-in Libs
 ##################################################
+import ctypes
 import time
 import json
 import threading
@@ -10,6 +11,7 @@ import threading
 ##################################################
 import keyboard
 from pynput.mouse import Listener, Controller, Button
+from ctypes import windll
 
 ##################################################
 # Project Libs
@@ -166,9 +168,13 @@ class Organizer:
 
     def __InputAction(self, action):
         if action == "massdclick":
+            ctypes.windll.user32.BlockInput(True)
             self.__LoopIndex(action="double_click")
+            ctypes.windll.user32.BlockInput(False)
         if action == "massclick":
+            ctypes.windll.user32.BlockInput(True)
             self.__LoopIndex(action="click")
+            ctypes.windll.user32.BlockInput(False)
         if action == "nextwindow":
             self.__IncrementIndex()
         if action == "prevwindow":
