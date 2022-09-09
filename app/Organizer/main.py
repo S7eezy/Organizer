@@ -154,8 +154,9 @@ class Organizer:
                 self.Mouse.move(1,1)
                 keyboard.press("ctrl")
                 self.Mouse.press(Button.left)
-                keyboard.release("ctrl")
                 self.Mouse.release(Button.left)
+                keyboard.release("ctrl")
+
             elif action == "click":
                 self.Mouse.position = position
                 self.Mouse.press(Button.left)
