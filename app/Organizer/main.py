@@ -155,6 +155,8 @@ class Organizer:
                 self.Mouse.position = position
                 self.Mouse.move(1,1)
                 time.sleep(0.1)
+                self.Mouse.press(Button.left)
+                self.Mouse.release(Button.left)
                 keyboard.press("ctrl")
                 self.Mouse.press(Button.left)
                 self.Mouse.release(Button.left)
@@ -168,13 +170,9 @@ class Organizer:
 
     def __InputAction(self, action):
         if action == "massdclick":
-            ctypes.windll.user32.BlockInput(True)
             self.__LoopIndex(action="double_click")
-            ctypes.windll.user32.BlockInput(False)
         if action == "massclick":
-            ctypes.windll.user32.BlockInput(True)
             self.__LoopIndex(action="click")
-            ctypes.windll.user32.BlockInput(False)
         if action == "nextwindow":
             self.__IncrementIndex()
         if action == "prevwindow":
