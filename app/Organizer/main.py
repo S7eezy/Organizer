@@ -11,7 +11,7 @@ import threading
 ##################################################
 import keyboard
 from pynput.mouse import Listener, Controller, Button
-from ctypes import windll
+import pyperclip
 
 ##################################################
 # Project Libs
@@ -40,6 +40,7 @@ class Organizer:
             self.GetConfig()
             self.GetCharacters()
             self.GetKeys()
+            self.delay = float(self.Config["Delay"])
         except json.decoder.JSONDecodeError:
             print("ERREUR JSON")
 
@@ -151,21 +152,19 @@ class Organizer:
             self.CurrentWindow = self.Characters[self.ProcessIndex]
             CW.switchToWindow(self.CurrentWindow)
             if action == "double_click":
+                time.sleep(0.2)
+                keyboard.press_and_release("space")
+                keyboard.write(f"{pyperclip.paste()}")
                 time.sleep(0.1)
-                self.Mouse.position = position
-                self.Mouse.move(1,1)
+                keyboard.press_and_release("enter")
                 time.sleep(0.1)
-                self.Mouse.press(Button.left)
-                self.Mouse.release(Button.left)
-                keyboard.press("ctrl")
-                self.Mouse.press(Button.left)
-                self.Mouse.release(Button.left)
-                keyboard.release("ctrl")
+                keyboard.press_and_release("enter")
 
             elif action == "click":
                 self.Mouse.position = position
                 self.Mouse.press(Button.left)
                 self.Mouse.release(Button.left)
+                time.sleep(self.delay / 1000)
         self.__IncrementIndex()
 
     def __InputAction(self, action):
@@ -191,6 +190,8 @@ class Organizer:
             for key, val in self.mKeys.items():
                 if val in str(button):
                     self.__InputAction(key)
+                    while pressed:
+                        time.sleep(0.1)
 
     def __KeyboardHandler(self):
         while True:

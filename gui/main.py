@@ -58,6 +58,7 @@ class MainWindow(QMainWindow):
         self.ui.ui_btn_savecfg.clicked.connect(self.__HandleCfgSave)
         self.ui.ui_btn_loadcfg.clicked.connect(self.__HandleCfgLoad)
         self.ui.ui_btn_startstop.clicked.connect(self.__HandleCfgStartStop)
+        self.ui.ui_btn_delay.textChanged.connect(self.__HandleEditDelay)
 
         """ Init start/stop component """
         self.ui.ui_btn_startstop.setText("GO")
@@ -75,6 +76,10 @@ class MainWindow(QMainWindow):
     ##################################################
     # Link actions to UI Components
     ##################################################
+    def __HandleEditDelay(self):
+        self.delay = self.ui.ui_btn_delay.text()
+        self.Organizer.delay = float(self.delay)
+
     def __HandleUiBtns(self):
         sender = self.sender().objectName()
 
@@ -220,6 +225,7 @@ class MainWindow(QMainWindow):
         Config["Characters"] = self.Organizer.Characters
         Config["mKeys"] = self.Organizer.mKeys
         Config["kbKeys"] = self.Organizer.kbKeys
+        Config["Delay"] = self.delay
         self.Organizer.SetConfig(data=Config)
         self.Organizer.UpdateModel()
 
@@ -315,6 +321,7 @@ class MainWindow(QMainWindow):
             exec(f"self.ui.{label}.clicked.connect(self.__HandleUiBtns)")
             exec(f"self.ui.{label}.setGeometry(QRect(710, {390 + 40 * (keyIndex - 1)}, 31, 31))")
             exec(f"self.ui.{label}.show()")
+        self.ui.ui_btn_delay.setText(str(self.Organizer.delay))
 
 
 ##################################################
