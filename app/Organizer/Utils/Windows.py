@@ -92,7 +92,6 @@ def switchToWindow(processName):
         data = enum_process_windows(pid)
         if data:
             for handle, text in data:
-                print(processName, text)
                 if processName == text.split(" -")[0]:
                     remote_thread, _ = wproc.GetWindowThreadProcessId(handle)
                     wproc.AttachThreadInput(wapi.GetCurrentThreadId(), remote_thread, True)
