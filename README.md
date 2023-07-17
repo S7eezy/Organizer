@@ -1,5 +1,3 @@
-![](/gui/assets/logofull.png)
-
 # Prérequis
 - Python 3.X [https://www.python.org/downloads/windows/]
 
