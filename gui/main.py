@@ -87,16 +87,19 @@ class MainWindow(QMainWindow):
             char_idx = int(re.findall(r'\d+', f"{sender.split('_')[0]}")[0]) - 1
             self.Organizer.Characters[char_idx], self.Organizer.Characters[char_idx - 1] = self.Organizer.Characters[char_idx - 1], self.Organizer.Characters[char_idx]
             self.__CreateChar()
+            self.overlay.update_icons(self.Organizer.Characters, self.Organizer.CharactersIcons)
 
         elif "_btndown" in sender:
             char_idx = int(re.findall(r'\d+', f"{sender.split('_')[0]}")[0]) - 1
             self.Organizer.Characters[char_idx], self.Organizer.Characters[char_idx + 1] = self.Organizer.Characters[char_idx + 1], self.Organizer.Characters[char_idx]
             self.__CreateChar()
+            self.overlay.update_icons(self.Organizer.Characters, self.Organizer.CharactersIcons)
 
         elif "_btndel" in sender:
             char_idx = int(re.findall(r'\d+', f"{sender.split('_')[0]}")[0]) - 1
             self.Organizer.Characters.pop(char_idx)
             self.__CreateChar()
+            self.overlay.update_icons(self.Organizer.Characters, self.Organizer.CharactersIcons)
 
         elif "x1_" in sender:
             x1Key = sender.split("x1_")[1]
@@ -173,6 +176,16 @@ class MainWindow(QMainWindow):
             exec(f"self.ui.{label}.setGeometry(QRect(300, {begin + 40 * (self.CharIndex -1)}, 231, 31))")
             exec(f"self.ui.{label}.show()")
 
+            label = f"char{self.CharIndex}_iconbtn"
+            setattr(self.ui, label, QPushButton(self.ui.centralwidget))
+            exec(f"self.ui.{label}.setObjectName(u'{label}')")
+            icon_path = self.Organizer.CharactersIcons.get(Char, "gui/assets/icon_default.png")
+            exec(f"self.ui.{label}.setIcon(QIcon('{icon_path}'))")
+            exec(f"self.ui.{label}.setIconSize(QSize(24, 24))")
+            exec(f"self.ui.{label}.setGeometry(QRect(256, {begin + 40 * (self.CharIndex - 1)}, 31, 31))")
+            exec(f"self.ui.{label}.clicked.connect(self.__HandleIconSelection)")
+            exec(f"self.ui.{label}.show()")
+
             label = f"char{self.CharIndex}_btnup"
             setattr(self.ui, label, QPushButton(self.ui.centralwidget))
             exec(f"self.ui.{label}.setObjectName(u'{label}')")
@@ -214,7 +227,11 @@ class MainWindow(QMainWindow):
         Windows = self.Organizer.GetActiveWindowsFiltered()
         self.__HandleTextBrowser("Blue", self.__TimedLog(f"Auto-Detect : {Windows}"))
         self.Organizer.Characters = Windows
+        for char in Windows:
+            if char not in self.Organizer.CharactersIcons:
+                self.Organizer.CharactersIcons[char] = "gui/assets/icon_default.png"
         self.__CreateChar()
+        self.overlay.update_icons(self.Organizer.Characters, self.Organizer.CharactersIcons)
 
     ##################################################
     # Handle Save Button
@@ -223,6 +240,7 @@ class MainWindow(QMainWindow):
         Config = dict()
         self.__HandleTextBrowser("Green", self.__TimedLog("Config sauvegardée"))
         Config["Characters"] = self.Organizer.Characters
+        Config["CharactersIcons"] = self.Organizer.CharactersIcons
         Config["mKeys"] = self.Organizer.mKeys
         Config["kbKeys"] = self.Organizer.kbKeys
         Config["Delay"] = self.delay
@@ -238,6 +256,27 @@ class MainWindow(QMainWindow):
         self.__HandleTextBrowser("Green", self.__TimedLog("Config chargée"))
         self.__CreateChar()
         self.__LoadKeyBinds()
+
+    ##################################################
+    # Handle Icons Selection
+    ##################################################
+    def __HandleIconSelection(self):
+        sender = self.sender()
+        char_idx = int(re.findall(r'\d+', sender.objectName())[0]) - 1
+        char_name = self.Organizer.Characters[char_idx]
+
+        # Open file dialog to select an icon
+        icon_path, _ = QFileDialog.getOpenFileName(self, "Select Icon", "gui/assets/icons", "Images (*.png *.jpg *.bmp)")
+        if icon_path:
+            # Update the icon button
+            sender.setIcon(QIcon(icon_path))
+            sender.setIconSize(QSize(24, 24))
+            # Update the Organizer's character icons
+            self.Organizer.CharactersIcons[char_name] = icon_path
+            # Update the overlay
+            self.overlay.update_icons(self.Organizer.Characters, self.Organizer.CharactersIcons)
+            # Optionally save config immediately
+            self.__HandleCfgSave()
 
     ##################################################
     # Remove Characters Components

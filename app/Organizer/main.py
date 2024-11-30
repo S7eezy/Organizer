@@ -5,6 +5,9 @@ import ctypes
 import time
 import json
 import threading
+import os
+import shutil
+
 
 ##################################################
 # External Libs
@@ -12,6 +15,8 @@ import threading
 import keyboard
 from pynput.mouse import Listener, Controller, Button
 import pyperclip
+from PySide6.QtCore import QObject, Signal
+
 
 ##################################################
 # Project Libs
@@ -22,12 +27,15 @@ import app.Organizer.Utils.Windows as CW
 ##################################################
 # Organizer Core
 ##################################################
-class Organizer:
-    def __init__(self):
+class Organizer(QObject):
+    current_index_changed = Signal(int)
 
+    def __init__(self):
+        super().__init__()
         """ Storage initialisation """
         self.Config = dict()
         self.Characters = []
+        self.CharactersIcons = dict()
         self.kbKeys = dict()
         self.mKeys = dict()
         self.Mouse = Controller()
@@ -99,8 +107,34 @@ class Organizer:
         self.GetKeys()
 
     def GetConfig(self, file="app/Organizer/config.json"):
-        with open(file, "r") as filehandler:
-            self.Config = json.load(filehandler)
+        try:
+            with open(file, "r") as filehandler:
+                self.Config = json.load(filehandler)
+        except (json.JSONDecodeError, FileNotFoundError, PermissionError) as e:
+            print(f"Error loading config: {e}")
+            print("Loading default configuration.")
+
+            # Path to default config
+            default_config_path = "app/Organizer/default.json"
+
+            # Check if default config exists
+            if not os.path.exists(default_config_path):
+                print("Default configuration file not found.")
+                # Handle the absence of default.json appropriately
+                self.Config = {}  # Or set to some default dict
+                return
+
+            # Load default config
+            with open(default_config_path, "r") as filehandler:
+                self.Config = json.load(filehandler)
+
+            # Replace the corrupted main config with default config
+            try:
+                shutil.copyfile(default_config_path, file)
+                print("Replaced corrupted config with default config.")
+            except Exception as copy_exception:
+                print(f"Error replacing config file: {copy_exception}")
+
 
     @staticmethod
     def SetConfig(file="app/Organizer/config.json", data=None):
@@ -113,6 +147,8 @@ class Organizer:
         Characters = []
         for key in self.Config["Characters"]:
             Characters.append(key)
+            icon = self.Config.get("CharactersIcons", {}).get(key, "gui/assets/icon_default.png")
+            self.CharactersIcons[key] = icon
         self.Characters = Characters
 
     def GetKeys(self):
@@ -136,6 +172,7 @@ class Organizer:
             self.ProcessIndex = 0
         self.CurrentWindow = self.Characters[self.ProcessIndex]
         CW.switchToWindow(self.CurrentWindow)
+        self.current_index_changed.emit(self.ProcessIndex)
 
     def __DecrementIndex(self):
         if self.ProcessIndex == 0:
@@ -144,6 +181,7 @@ class Organizer:
             self.ProcessIndex -= 1
         self.CurrentWindow = self.Characters[self.ProcessIndex]
         CW.switchToWindow(self.CurrentWindow)
+        self.current_index_changed.emit(self.ProcessIndex)
 
     def __LoopIndex(self, action):
         position = self.Mouse.position
