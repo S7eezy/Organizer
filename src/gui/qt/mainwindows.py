@@ -11,7 +11,7 @@
 from PySide6.QtCore import *
 from PySide6.QtGui import *
 from PySide6.QtWidgets import *
-from core.utils.resources import resource_path, get_user_data_dir
+from core.utils.resources import resource_path, get_user_data_dir, get_icons_dir
 
 
 class Ui_MainWindow(object):

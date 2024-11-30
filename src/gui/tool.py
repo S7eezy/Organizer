@@ -37,12 +37,12 @@ class Tool(QMainWindow):
         self.ui.setupUi(self)
         self.setWindowTitle("Steezy Organizer")
         self.appIcon = QIcon()
-        self.appIcon.addFile(resource_path("gui/assets/icons/icon_1616.png"), QSize(16, 16))
-        self.appIcon.addFile(resource_path("gui/assets/icons/icon_3232.png"), QSize(32, 32))
-        self.appIcon.addFile(resource_path("gui/assets/icons/icon_4848.png"), QSize(48, 48))
-        self.appIcon.addFile(resource_path("gui/assets/icons/icon_6464.png"), QSize(64, 64))
-        self.appIcon.addFile(resource_path("gui/assets/icons/icon_128128.png"), QSize(128, 128))
-        self.appIcon.addFile(resource_path("gui/assets/icons/icon_256256.png"), QSize(256, 256))
+        self.appIcon.addFile(resource_path("gui/assets/logos/icon_1616.png"), QSize(16, 16))
+        self.appIcon.addFile(resource_path("gui/assets/logos/icon_3232.png"), QSize(32, 32))
+        self.appIcon.addFile(resource_path("gui/assets/logos/icon_4848.png"), QSize(48, 48))
+        self.appIcon.addFile(resource_path("gui/assets/logos/icon_6464.png"), QSize(64, 64))
+        self.appIcon.addFile(resource_path("gui/assets/logos/icon_128128.png"), QSize(128, 128))
+        self.appIcon.addFile(resource_path("gui/assets/logos/icon_256256.png"), QSize(256, 256))
         self.setWindowIcon(self.appIcon)
 
         """ organizer instance storage """
@@ -65,7 +65,7 @@ class Tool(QMainWindow):
 
         """ Init start/stop component """
         self.ui.ui_btn_startstop.setText("GO")
-        self.ui.img_startstop.setPixmap(QPixmap("src/gui/assets/utils/stop.png"))
+        self.ui.img_startstop.setPixmap(QPixmap(resource_path("gui/assets/utils/stop.png")))
         self.ui.img_startstop.show()
 
         """ Load Config """
