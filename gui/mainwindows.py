@@ -22,61 +22,103 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName(u"centralwidget")
         self.ui_console = QTextBrowser(self.centralwidget)
         self.ui_console.setObjectName(u"ui_console")
-        self.ui_console.setGeometry(QRect(30, 381, 401, 161))
+        self.ui_console.setGeometry(QRect(30, 301, 401, 281))
+
+        ## Config - Labels
+        x = 470
+        y = 320
+        s = 40
         self.ui_label_massclick = QLabel(self.centralwidget)
         self.ui_label_massclick.setObjectName(u"ui_label_massclick")
-        self.ui_label_massclick.setGeometry(QRect(510, 390, 91, 31))
+        self.ui_label_massclick.setGeometry(QRect(x, y, 91, 31))
+        y += s
+
         self.ui_label_massdclick = QLabel(self.centralwidget)
         self.ui_label_massdclick.setObjectName(u"ui_label_massdclick")
-        self.ui_label_massdclick.setGeometry(QRect(510, 430, 91, 31))
+        self.ui_label_massdclick.setGeometry(QRect(x, y, 91, 31))
+        y += s
+
         self.ui_label_nextwindow = QLabel(self.centralwidget)
         self.ui_label_nextwindow.setObjectName(u"ui_label_nextwindow")
-        self.ui_label_nextwindow.setGeometry(QRect(510, 470, 91, 31))
+        self.ui_label_nextwindow.setGeometry(QRect(x, y, 91, 31))
+        y += s
+
         self.ui_label_prevwindow = QLabel(self.centralwidget)
         self.ui_label_prevwindow.setObjectName(u"ui_label_prevwindow")
-        self.ui_label_prevwindow.setGeometry(QRect(510, 510, 91, 31))
+        self.ui_label_prevwindow.setGeometry(QRect(x, y, 91, 31))
+        y += s
+
         self.ui_label_delay = QLabel(self.centralwidget)
         self.ui_label_delay.setObjectName(u"ui_label_delay")
-        self.ui_label_delay.setGeometry(QRect(510, 550, 91, 31))
+        self.ui_label_delay.setGeometry(QRect(x, y, 91, 31))
+
+        ## Config - Buttons
+        x = 580
+        y = 320
+        s = 40
         self.ui_btn_massclick = QPushButton(self.centralwidget)
         self.ui_btn_massclick.setObjectName(u"ui_btn_massclick")
-        self.ui_btn_massclick.setGeometry(QRect(620, 390, 75, 31))
+        self.ui_btn_massclick.setGeometry(QRect(x, y, 75, 31))
+        y += s
+
         self.ui_btn_massdclick = QPushButton(self.centralwidget)
         self.ui_btn_massdclick.setObjectName(u"ui_btn_massdclick")
-        self.ui_btn_massdclick.setGeometry(QRect(620, 430, 75, 31))
+        self.ui_btn_massdclick.setGeometry(QRect(x, y, 75, 31))
+        y += s
+
         self.ui_btn_nextwindow = QPushButton(self.centralwidget)
         self.ui_btn_nextwindow.setObjectName(u"ui_btn_nextwindow")
-        self.ui_btn_nextwindow.setGeometry(QRect(620, 470, 75, 31))
+        self.ui_btn_nextwindow.setGeometry(QRect(x, y, 75, 31))
+        y += s
+
         self.ui_btn_prevwindow = QPushButton(self.centralwidget)
         self.ui_btn_prevwindow.setObjectName(u"ui_btn_prevwindow")
-        self.ui_btn_prevwindow.setGeometry(QRect(620, 510, 75, 31))
+        self.ui_btn_prevwindow.setGeometry(QRect(x, y, 75, 31))
+        y += s
+
         self.ui_btn_delay = QLineEdit(self.centralwidget)
         self.ui_btn_delay.setObjectName(u"ui_btn_delay")
-        self.ui_btn_delay.setGeometry(QRect(620, 550, 75, 31))
+        self.ui_btn_delay.setGeometry(QRect(x, y, 75, 31))
+
+
+        ## Actions - Buttons
+        x = 70
+        y = 100
+        s = 40
         self.ui_btn_autodetect = QPushButton(self.centralwidget)
         self.ui_btn_autodetect.setObjectName(u"ui_btn_autodetect")
-        self.ui_btn_autodetect.setGeometry(QRect(70, 100, 121, 23))
+        self.ui_btn_autodetect.setGeometry(QRect(x, y, 121, 23))
+        y += s
+
         self.ui_btn_loadcfg = QPushButton(self.centralwidget)
         self.ui_btn_loadcfg.setObjectName(u"ui_btn_loadcfg")
-        self.ui_btn_loadcfg.setGeometry(QRect(70, 140, 121, 23))
+        self.ui_btn_loadcfg.setGeometry(QRect(x, y, 121, 23))
+        y += s
+
         self.ui_btn_savecfg = QPushButton(self.centralwidget)
         self.ui_btn_savecfg.setObjectName(u"ui_btn_savecfg")
-        self.ui_btn_savecfg.setGeometry(QRect(70, 180, 121, 23))
+        self.ui_btn_savecfg.setGeometry(QRect(x, y, 121, 23))
+        y += s
+
         self.ui_btn_startstop = QPushButton(self.centralwidget)
         self.ui_btn_startstop.setObjectName(u"ui_btn_startstop")
-        self.ui_btn_startstop.setGeometry(QRect(70, 220, 121, 23))
+        self.ui_btn_startstop.setGeometry(QRect(x, y, 121, 23))
+
         self.img_startstop = QLabel(self.centralwidget)
         self.img_startstop.setObjectName(u"img_startstop")
         self.img_startstop.setGeometry(QRect(30, 210, 41, 41))
+
+
         self.img_gif = QLabel(self.centralwidget)
         self.img_gif.setObjectName(u"img_gif")
-        self.img_gif.setGeometry(QRect(85, 340, 48, 48))
+        self.img_gif.setGeometry(QRect(85, 260, 48, 48))
         self.gifmovie = QMovie("gui/assets/gif.gif")
+
         self.logo = QLabel(self.centralwidget)
         self.logo.setObjectName(u"logo")
         self.logo.setGeometry(QRect(20, 20, 250, 60))
         self.logo.setPixmap(QPixmap("gui/assets/logomain.png"))
-        self.gifmovie = QMovie("gui/assets/gif.gif")
+
         self.img_gif.setMovie(self.gifmovie)
         self.gifmovie.start()
         MainWindow.setCentralWidget(self.centralwidget)

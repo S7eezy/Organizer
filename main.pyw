@@ -29,21 +29,15 @@ if __name__ == '__main__':
 
     app.setStyleSheet(style)
 
-    window = MainWindow(Organizer=Organizer)
-    window.show()
-
-    # Create and show the overlay
     overlay = OverlayWidget(
         characters=Organizer.Characters,
         characters_icons=Organizer.CharactersIcons,
         current_index=Organizer.ProcessIndex
     )
-    overlay.show()
 
-    # Pass the overlay to the main window
-    window.overlay = overlay
-
-    # Connect the signal
     Organizer.current_index_changed.connect(overlay.set_current_index)
+
+    window = MainWindow(Organizer=Organizer, overlay=overlay)
+    window.show()
 
     sys.exit(app.exec())

@@ -25,7 +25,7 @@ from app.Organizer.main import Organizer
 # GUI Core
 ##################################################
 class MainWindow(QMainWindow):
-    def __init__(self, Organizer):
+    def __init__(self, Organizer, overlay):
         self.MyApp = "Steezy.Organizer.2_0_0"
         ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(self.MyApp)
 
@@ -45,6 +45,7 @@ class MainWindow(QMainWindow):
 
         """ Organizer instance storage """
         self.Organizer = Organizer
+        self.overlay = overlay
 
         """ Init actions and character index """
         self.CharIndex = 0
@@ -275,8 +276,10 @@ class MainWindow(QMainWindow):
             self.Organizer.CharactersIcons[char_name] = icon_path
             # Update the overlay
             self.overlay.update_icons(self.Organizer.Characters, self.Organizer.CharactersIcons)
+            self.__HandleTextBrowser("Blue", self.__TimedLog(f"Icône mise à jour:\n{char_name} -> {icon_path.split('/')[-1]}"))
             # Optionally save config immediately
-            self.__HandleCfgSave()
+            # self.__HandleCfgSave()
+
 
     ##################################################
     # Remove Characters Components
@@ -325,11 +328,13 @@ class MainWindow(QMainWindow):
             self.__HandleTextBrowser("Green", self.__TimedLog("Lancement d'Organizer"))
             self.ui.ui_btn_startstop.setText("STOP")
             self.ui.img_startstop.show()
+            self.overlay.show()
         else:
             self.ui.img_startstop.setPixmap(QPixmap("gui/assets/stop.png"))
             self.__HandleTextBrowser("Red", self.__TimedLog("Arrêt d'Organizer"))
             self.ui.ui_btn_startstop.setText("GO")
             self.ui.img_startstop.show()
+            self.overlay.hide()
 
     ##################################################
     # Load Keybinds and init components
@@ -350,7 +355,7 @@ class MainWindow(QMainWindow):
             exec(f"self.ui.{label}.setText(u'')")
             exec(f"self.ui.{label}.setIcon(QIcon('gui/assets/x1.png'))")
             exec(f"self.ui.{label}.clicked.connect(self.__HandleUiBtns)")
-            exec(f"self.ui.{label}.setGeometry(QRect(740, {390 + 40 * (keyIndex - 1)}, 31, 31))")
+            exec(f"self.ui.{label}.setGeometry(QRect(705, {320 + 40 * (keyIndex - 1)}, 31, 31))")
             exec(f"self.ui.{label}.show()")
             label = f"ui_x2_{key}"
             setattr(self.ui, label, QPushButton(self.ui.centralwidget))
@@ -358,7 +363,7 @@ class MainWindow(QMainWindow):
             exec(f"self.ui.{label}.setText(u'')")
             exec(f"self.ui.{label}.setIcon(QIcon('gui/assets/x2.png'))")
             exec(f"self.ui.{label}.clicked.connect(self.__HandleUiBtns)")
-            exec(f"self.ui.{label}.setGeometry(QRect(710, {390 + 40 * (keyIndex - 1)}, 31, 31))")
+            exec(f"self.ui.{label}.setGeometry(QRect(670, {320 + 40 * (keyIndex - 1)}, 31, 31))")
             exec(f"self.ui.{label}.show()")
         self.ui.ui_btn_delay.setText(str(self.Organizer.delay))
 

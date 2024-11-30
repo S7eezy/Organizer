@@ -221,6 +221,9 @@ class Organizer(QObject):
 
     def ManageKb(self):
         self.KeyboardHandlerStatus = not self.KeyboardHandlerStatus
+        if self.KeyboardHandlerStatus:
+            self.CurrentWindow = self.Characters[self.ProcessIndex]
+            CW.switchToWindow(self.CurrentWindow)
         return self.KeyboardHandlerStatus
 
     def on_click(self, x, y, button, pressed):
@@ -239,7 +242,7 @@ class Organizer(QObject):
                     if keyboard.is_pressed(val):
                         self.__InputAction(key)
                         while keyboard.is_pressed(val):
-                            continue
+                            time.sleep(.01)
 
 
 ##################################################
