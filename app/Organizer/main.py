@@ -140,7 +140,6 @@ class Organizer(QObject):
     def SetConfig(file="app/Organizer/config.json", data=None):
         with open(file, "w+") as filehandler:
             if data:
-                print(data)
                 json.dump(data, filehandler)
 
     def GetCharacters(self):
