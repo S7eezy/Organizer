@@ -12,11 +12,11 @@
 # ╚█████╔╝██║░░██║╚██████╔╝██║░░██║██║░╚███║██║███████╗███████╗██║░░██║
 # ░╚════╝░╚═╝░░╚═╝░╚═════╝░╚═╝░░╚═╝╚═╝░░╚══╝╚═╝╚══════╝╚══════╝╚═╝░░╚═╝
 
-
-from app.Organizer.main import Organizer
+from src.core.organizer import Organizer
+from src.core.utils.resources import resource_path
 from PySide6.QtWidgets import QApplication
-from gui.main import MainWindow
-from gui.overlay import OverlayWidget
+from src.gui.tool import Tool
+from src.gui.overlay import OverlayWidget
 import sys
 
 if __name__ == '__main__':
@@ -24,7 +24,7 @@ if __name__ == '__main__':
 
     app = QApplication(sys.argv)
 
-    with open('gui/style/stylesheet.qss', 'r') as f:
+    with open(resource_path('src/gui/style/stylesheet.qss'), 'r') as f:
         style = f.read()
 
     app.setStyleSheet(style)
@@ -37,7 +37,7 @@ if __name__ == '__main__':
 
     Organizer.current_index_changed.connect(overlay.set_current_index)
 
-    window = MainWindow(Organizer=Organizer, overlay=overlay)
+    window = Tool(organizer=Organizer, overlay=overlay)
     window.show()
 
     sys.exit(app.exec())

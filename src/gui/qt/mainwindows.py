@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'MainWindow - untitledKeUjrw.ui'
+## Form generated from reading UI file 'Tool - untitledKeUjrw.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.1.0
 ##
@@ -11,12 +11,13 @@
 from PySide6.QtCore import *
 from PySide6.QtGui import *
 from PySide6.QtWidgets import *
+from src.core.utils.resources import resource_path
 
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
-            MainWindow.setObjectName(u"MainWindow")
+            MainWindow.setObjectName(u"Tool")
         MainWindow.resize(800, 600)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
@@ -112,12 +113,12 @@ class Ui_MainWindow(object):
         self.img_gif = QLabel(self.centralwidget)
         self.img_gif.setObjectName(u"img_gif")
         self.img_gif.setGeometry(QRect(85, 260, 48, 48))
-        self.gifmovie = QMovie("gui/assets/gif.gif")
+        self.gifmovie = QMovie(resource_path("src/gui/assets/logos/gif.gif"))
 
         self.logo = QLabel(self.centralwidget)
         self.logo.setObjectName(u"logo")
         self.logo.setGeometry(QRect(20, 20, 250, 60))
-        self.logo.setPixmap(QPixmap("gui/assets/logomain.png"))
+        self.logo.setPixmap(QPixmap(resource_path("src/gui/assets/logos/logomain.png")))
 
         self.img_gif.setMovie(self.gifmovie)
         self.gifmovie.start()
@@ -136,20 +137,20 @@ class Ui_MainWindow(object):
     # setupUi
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
-        self.ui_label_massclick.setText(QCoreApplication.translate("MainWindow", u"Mass Click", None))
-        self.ui_label_massdclick.setText(QCoreApplication.translate("MainWindow", u"Mass Autopilot", None))
-        self.ui_label_nextwindow.setText(QCoreApplication.translate("MainWindow", u"Pers. suivant", None))
-        self.ui_label_prevwindow.setText(QCoreApplication.translate("MainWindow", u"Pers. pr\u00e9c\u00e9dent", None))
-        self.ui_label_delay.setText(QCoreApplication.translate("MainWindow", u"D\u00e9lai (ms)", None))
-        self.ui_btn_massclick.setText(QCoreApplication.translate("MainWindow", u"...", None))
-        self.ui_btn_massdclick.setText(QCoreApplication.translate("MainWindow", u"...", None))
-        self.ui_btn_nextwindow.setText(QCoreApplication.translate("MainWindow", u"...", None))
-        self.ui_btn_prevwindow.setText(QCoreApplication.translate("MainWindow", u"...", None))
-        self.ui_btn_autodetect.setText(QCoreApplication.translate("MainWindow", u"Auto-Detect", None))
-        self.ui_btn_loadcfg.setText(QCoreApplication.translate("MainWindow", u"Charg. Config", None))
-        self.ui_btn_savecfg.setText(QCoreApplication.translate("MainWindow", u"Sauv. Config", None))
-        self.ui_btn_startstop.setText(QCoreApplication.translate("MainWindow", u"Start / Stop", None))
+        MainWindow.setWindowTitle(QCoreApplication.translate("Tool", u"Tool", None))
+        self.ui_label_massclick.setText(QCoreApplication.translate("Tool", u"Mass Click", None))
+        self.ui_label_massdclick.setText(QCoreApplication.translate("Tool", u"Mass Autopilot", None))
+        self.ui_label_nextwindow.setText(QCoreApplication.translate("Tool", u"Pers. suivant", None))
+        self.ui_label_prevwindow.setText(QCoreApplication.translate("Tool", u"Pers. pr\u00e9c\u00e9dent", None))
+        self.ui_label_delay.setText(QCoreApplication.translate("Tool", u"D\u00e9lai (ms)", None))
+        self.ui_btn_massclick.setText(QCoreApplication.translate("Tool", u"...", None))
+        self.ui_btn_massdclick.setText(QCoreApplication.translate("Tool", u"...", None))
+        self.ui_btn_nextwindow.setText(QCoreApplication.translate("Tool", u"...", None))
+        self.ui_btn_prevwindow.setText(QCoreApplication.translate("Tool", u"...", None))
+        self.ui_btn_autodetect.setText(QCoreApplication.translate("Tool", u"Auto-Detect", None))
+        self.ui_btn_loadcfg.setText(QCoreApplication.translate("Tool", u"Charg. Config", None))
+        self.ui_btn_savecfg.setText(QCoreApplication.translate("Tool", u"Sauv. Config", None))
+        self.ui_btn_startstop.setText(QCoreApplication.translate("Tool", u"Start / Stop", None))
         self.img_startstop.setText("")
     # retranslateUi
 

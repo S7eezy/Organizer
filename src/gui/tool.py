@@ -17,34 +17,35 @@ from PySide6.QtWidgets import *
 ##################################################
 # Project Libs
 ##################################################
-from gui.mainwindows import Ui_MainWindow
-from app.Organizer.main import Organizer
+from src.gui.qt.mainwindows import Ui_MainWindow
+from src.core.organizer import Organizer
+from src.core.utils.resources import resource_path
 
 
 ##################################################
 # GUI Core
 ##################################################
-class MainWindow(QMainWindow):
-    def __init__(self, Organizer, overlay):
-        self.MyApp = "Steezy.Organizer.2_0_0"
+class Tool(QMainWindow):
+    def __init__(self, organizer, overlay):
+        self.MyApp = "Steezy.organizer.2_0_0"
         ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(self.MyApp)
 
         """ GUI Init """
-        super(MainWindow, self).__init__()
+        super(Tool, self).__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         self.setWindowTitle("Steezy Organizer")
         self.appIcon = QIcon()
-        self.appIcon.addFile("gui/assets/icon_1616.png", QSize(16, 16))
-        self.appIcon.addFile("gui/assets/icon_3232.png", QSize(32, 32))
-        self.appIcon.addFile("gui/assets/icon_4848.png", QSize(48, 48))
-        self.appIcon.addFile("gui/assets/icon_6464.png", QSize(64, 64))
-        self.appIcon.addFile("gui/assets/icon_128128.png", QSize(128, 128))
-        self.appIcon.addFile("gui/assets/icon_256256.png", QSize(256, 256))
+        self.appIcon.addFile(resource_path("gui/assets/icons/icon_1616.png"), QSize(16, 16))
+        self.appIcon.addFile(resource_path("gui/assets/icons/icon_3232.png"), QSize(32, 32))
+        self.appIcon.addFile(resource_path("gui/assets/icons/icon_4848.png"), QSize(48, 48))
+        self.appIcon.addFile(resource_path("gui/assets/icons/icon_6464.png"), QSize(64, 64))
+        self.appIcon.addFile(resource_path("gui/assets/icons/icon_128128.png"), QSize(128, 128))
+        self.appIcon.addFile(resource_path("gui/assets/icons/icon_256256.png"), QSize(256, 256))
         self.setWindowIcon(self.appIcon)
 
-        """ Organizer instance storage """
-        self.Organizer = Organizer
+        """ organizer instance storage """
+        self.Organizer = organizer
         self.overlay = overlay
 
         """ Init actions and character index """
@@ -63,7 +64,7 @@ class MainWindow(QMainWindow):
 
         """ Init start/stop component """
         self.ui.ui_btn_startstop.setText("GO")
-        self.ui.img_startstop.setPixmap(QPixmap("gui/assets/stop.png"))
+        self.ui.img_startstop.setPixmap(QPixmap("src/gui/assets/utils/stop.png"))
         self.ui.img_startstop.show()
 
         """ Load Config """
@@ -180,7 +181,7 @@ class MainWindow(QMainWindow):
             label = f"char{self.CharIndex}_iconbtn"
             setattr(self.ui, label, QPushButton(self.ui.centralwidget))
             exec(f"self.ui.{label}.setObjectName(u'{label}')")
-            icon_path = self.Organizer.CharactersIcons.get(Char, "gui/assets/icon_default.png")
+            icon_path = self.Organizer.CharactersIcons.get(Char, "src/gui/assets/logos/icon_6464.png")
             exec(f"self.ui.{label}.setIcon(QIcon('{icon_path}'))")
             exec(f"self.ui.{label}.setIconSize(QSize(24, 24))")
             exec(f"self.ui.{label}.setGeometry(QRect(256, {begin + 40 * (self.CharIndex - 1)}, 31, 31))")
@@ -192,10 +193,10 @@ class MainWindow(QMainWindow):
             exec(f"self.ui.{label}.setObjectName(u'{label}')")
             exec(f"self.ui.{label}.setText(u'')")
             if self.CharIndex != 1:
-                exec(f"self.ui.{label}.setIcon(QIcon('gui/assets/up.png'))")
+                exec(f"self.ui.{label}.setIcon(QIcon(resource_path('src/gui/assets/utils/up.png')))")
                 exec(f"self.ui.{label}.clicked.connect(self.__HandleUiBtns)")
             else:
-                exec(f"self.ui.{label}.setIcon(QIcon('gui/assets/upgrey.png'))")
+                exec(f"self.ui.{label}.setIcon(QIcon(resource_path('src/gui/assets/utils/upgrey.png')))")
             exec(f"self.ui.{label}.setGeometry(QRect(440, {begin + 40 * (self.CharIndex -1)}, 31, 31))")
             exec(f"self.ui.{label}.show()")
 
@@ -204,10 +205,10 @@ class MainWindow(QMainWindow):
             exec(f"self.ui.{label}.setObjectName(u'{label}')")
             exec(f"self.ui.{label}.setText(u'')")
             if self.CharIndex != len(self.Organizer.Characters):
-                exec(f"self.ui.{label}.setIcon(QIcon('gui/assets/down.png'))")
+                exec(f"self.ui.{label}.setIcon(QIcon(resource_path('src/gui/assets/utils/down.png')))")
                 exec(f"self.ui.{label}.clicked.connect(self.__HandleUiBtns)")
             else:
-                exec(f"self.ui.{label}.setIcon(QIcon('gui/assets/downgrey.png'))")
+                exec(f"self.ui.{label}.setIcon(QIcon(resource_path('src/gui/assets/utils/downgrey.png')))")
             exec(f"self.ui.{label}.setGeometry(QRect(480, {begin + 40 * (self.CharIndex -1)}, 31, 31))")
             exec(f"self.ui.{label}.show()")
 
@@ -215,7 +216,7 @@ class MainWindow(QMainWindow):
             setattr(self.ui, label, QPushButton(self.ui.centralwidget))
             exec(f"self.ui.{label}.setObjectName(u'{label}')")
             exec(f"self.ui.{label}.setText(u'')")
-            exec(f"self.ui.{label}.setIcon(QIcon('gui/assets/trash.png'))")
+            exec(f"self.ui.{label}.setIcon(QIcon(resource_path('src/gui/assets/utils/trash.png')))")
             exec(f"self.ui.{label}.setGeometry(QRect(550, {begin + 40 * (self.CharIndex -1)}, 31, 31))")
             exec(f"self.ui.{label}.clicked.connect(self.__HandleUiBtns)")
             exec(f"self.ui.{label}.show()")
@@ -230,7 +231,7 @@ class MainWindow(QMainWindow):
         self.Organizer.Characters = Windows
         for char in Windows:
             if char not in self.Organizer.CharactersIcons:
-                self.Organizer.CharactersIcons[char] = "gui/assets/icon_default.png"
+                self.Organizer.CharactersIcons[char] = resource_path("src/gui/assets/logos/icon_6464.png")
         self.__CreateChar()
         self.overlay.update_icons(self.Organizer.Characters, self.Organizer.CharactersIcons)
 
@@ -267,12 +268,12 @@ class MainWindow(QMainWindow):
         char_name = self.Organizer.Characters[char_idx]
 
         # Open file dialog to select an icon
-        icon_path, _ = QFileDialog.getOpenFileName(self, "Select Icon", "gui/assets/icons", "Images (*.png *.jpg *.bmp)")
+        icon_path, _ = QFileDialog.getOpenFileName(self, "Select Icon", resource_path("src/gui/assets/characterIcons"), "Images (*.png *.jpg *.bmp)")
         if icon_path:
             # Update the icon button
             sender.setIcon(QIcon(icon_path))
             sender.setIconSize(QSize(24, 24))
-            # Update the Organizer's character icons
+            # Update the organizer's character characterIcons
             self.Organizer.CharactersIcons[char_name] = icon_path
             # Update the overlay
             self.overlay.update_icons(self.Organizer.Characters, self.Organizer.CharactersIcons)
@@ -324,14 +325,14 @@ class MainWindow(QMainWindow):
     def __HandleCfgStartStop(self):
         Status = self.Organizer.ManageKb()
         if Status:
-            self.ui.img_startstop.setPixmap(QPixmap("gui/assets/start.png"))
-            self.__HandleTextBrowser("Green", self.__TimedLog("Lancement d'Organizer"))
+            self.ui.img_startstop.setPixmap(QPixmap(resource_path("src/gui/assets/utils/start.png")))
+            self.__HandleTextBrowser("Green", self.__TimedLog("Lancement d'organizer"))
             self.ui.ui_btn_startstop.setText("STOP")
             self.ui.img_startstop.show()
             self.overlay.show()
         else:
-            self.ui.img_startstop.setPixmap(QPixmap("gui/assets/stop.png"))
-            self.__HandleTextBrowser("Red", self.__TimedLog("Arrêt d'Organizer"))
+            self.ui.img_startstop.setPixmap(QPixmap(resource_path("src/gui/assets/utils/stop.png")))
+            self.__HandleTextBrowser("Red", self.__TimedLog("Arrêt d'organizer"))
             self.ui.ui_btn_startstop.setText("GO")
             self.ui.img_startstop.show()
             self.overlay.hide()
@@ -353,7 +354,7 @@ class MainWindow(QMainWindow):
             setattr(self.ui, label, QPushButton(self.ui.centralwidget))
             exec(f"self.ui.{label}.setObjectName(u'{label}')")
             exec(f"self.ui.{label}.setText(u'')")
-            exec(f"self.ui.{label}.setIcon(QIcon('gui/assets/x1.png'))")
+            exec(f"self.ui.{label}.setIcon(QIcon(resource_path('src/gui/assets/utils/x1.png')))")
             exec(f"self.ui.{label}.clicked.connect(self.__HandleUiBtns)")
             exec(f"self.ui.{label}.setGeometry(QRect(705, {320 + 40 * (keyIndex - 1)}, 31, 31))")
             exec(f"self.ui.{label}.show()")
@@ -361,7 +362,7 @@ class MainWindow(QMainWindow):
             setattr(self.ui, label, QPushButton(self.ui.centralwidget))
             exec(f"self.ui.{label}.setObjectName(u'{label}')")
             exec(f"self.ui.{label}.setText(u'')")
-            exec(f"self.ui.{label}.setIcon(QIcon('gui/assets/x2.png'))")
+            exec(f"self.ui.{label}.setIcon(QIcon(resource_path('src/gui/assets/utils/x2.png')))")
             exec(f"self.ui.{label}.clicked.connect(self.__HandleUiBtns)")
             exec(f"self.ui.{label}.setGeometry(QRect(670, {320 + 40 * (keyIndex - 1)}, 31, 31))")
             exec(f"self.ui.{label}.show()")
@@ -381,7 +382,7 @@ if __name__ == '__main__':
 
     app.setStyleSheet(style)
 
-    window = MainWindow()
+    window = Tool(organizer=Organizer, overlay=None)
     window.show()
 
     sys.exit(app.exec())

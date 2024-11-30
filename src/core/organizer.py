@@ -21,11 +21,12 @@ from PySide6.QtCore import QObject, Signal
 ##################################################
 # Project Libs
 ##################################################
-import app.Organizer.Utils.Windows as CW
+import src.core.utils.win_hook as CW
+from src.core.utils.resources import resource_path
 
 
 ##################################################
-# Organizer Core
+# organizer Core
 ##################################################
 class Organizer(QObject):
     current_index_changed = Signal(int)
@@ -106,7 +107,7 @@ class Organizer(QObject):
         self.GetCharacters()
         self.GetKeys()
 
-    def GetConfig(self, file="app/Organizer/config.json"):
+    def GetConfig(self, file=resource_path("config.json")):
         try:
             with open(file, "r") as filehandler:
                 self.Config = json.load(filehandler)
@@ -115,7 +116,7 @@ class Organizer(QObject):
             print("Loading default configuration.")
 
             # Path to default config
-            default_config_path = "app/Organizer/default.json"
+            default_config_path = resource_path("src/core/utils/default.json")
 
             # Check if default config exists
             if not os.path.exists(default_config_path):
@@ -137,7 +138,7 @@ class Organizer(QObject):
 
 
     @staticmethod
-    def SetConfig(file="app/Organizer/config.json", data=None):
+    def SetConfig(file=resource_path("config.json"), data=None):
         with open(file, "w+") as filehandler:
             if data:
                 json.dump(data, filehandler)
@@ -146,7 +147,7 @@ class Organizer(QObject):
         Characters = []
         for key in self.Config["Characters"]:
             Characters.append(key)
-            icon = self.Config.get("CharactersIcons", {}).get(key, "gui/assets/icon_default.png")
+            icon = self.Config.get("CharactersIcons", {}).get(key, resource_path("src/gui/assets/logos/icon_6464.png"))
             self.CharactersIcons[key] = icon
         self.Characters = Characters
 
@@ -161,7 +162,7 @@ class Organizer(QObject):
         self.kbKeys = kbKeys
 
     ##################################################
-    # Organizer core actions
+    # organizer core actions
     ##################################################
 
     def __IncrementIndex(self):

@@ -5,7 +5,7 @@ import win32con as wcon
 import win32gui as wgui
 import win32process as wproc
 
-import app.Organizer.Utils.Utils as CU
+import src.core.utils.colors as CU
 
 
 def enum_windows_proc(wnd, param):
@@ -78,12 +78,14 @@ def removeActive():
         print(CU.bColors.WARNING + CU.bColors.BOLD + "ATTENTION: Fenêtre Dofus invalide" + CU.bColors.ENDC)
     return dofusWindows
 
+
 def isDofusWindow():
     curr = wgui.GetWindowText(wgui.GetForegroundWindow())
     if curr.find("Dofus") != -1:
         return True
     else:
         return False
+
 
 def switchToWindow(processName):
     proc_name = "Dofus.exe"

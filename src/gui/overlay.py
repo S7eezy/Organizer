@@ -3,7 +3,7 @@ import ctypes
 from PySide6.QtGui import QPainter, QPixmap, QColor
 from PySide6.QtWidgets import QWidget, QHBoxLayout, QLabel, QApplication
 from PySide6.QtCore import Qt, QTimer, QSize, QPoint
-
+from src.core.utils.resources import resource_path
 
 class OverlayWidget(QWidget):
     def __init__(self, characters, characters_icons, current_index):
@@ -20,23 +20,23 @@ class OverlayWidget(QWidget):
         # Make the window background transparent
         self.setAttribute(Qt.WA_TranslucentBackground)
 
-        # Create a horizontal layout for the icons
+        # Create a horizontal layout for the characterIcons
         self.layout = QHBoxLayout()
         self.layout.setContentsMargins(15, 15, 15, 15)
         self.layout.setSpacing(10)
         self.setLayout(self.layout)
 
-        # Add icons to the layout
+        # Add characterIcons to the layout
         self.icons_labels = []
         for i, char in enumerate(self.characters):
             label = QLabel()
-            pixmap = QPixmap(self.characters_icons.get(char, "gui/assets/icon_default.png"))
+            pixmap = QPixmap(self.characters_icons.get(char, resource_path("src/gui/assets/icon_default.png")))
             pixmap = pixmap.scaled(64, 64, Qt.KeepAspectRatio, Qt.SmoothTransformation)
             label.setPixmap(pixmap)
             self.layout.addWidget(label)
             self.icons_labels.append(label)
 
-        # Adjust the opacity of the icons
+        # Adjust the opacity of the characterIcons
         self.adjust_icon_opacity(self.current_index)
 
         # Optionally make the window click-through
@@ -64,11 +64,11 @@ class OverlayWidget(QWidget):
         return transparent
 
     def adjust_icon_opacity(self, focused_index):
-        """Adjust the opacity of icons based on which one is focused."""
+        """Adjust the opacity of characterIcons based on which one is focused."""
         for i, label in enumerate(self.icons_labels):
             opacity = 1.0 if i == focused_index else .5  # 0.2 for very low opacity
             # Get the original pixmap
-            original_pixmap = QPixmap(self.characters_icons.get(self.characters[i], "gui/assets/icon_default.png"))
+            original_pixmap = QPixmap(self.characters_icons.get(self.characters[i], resource_path("src/gui/assets/icon_default.png")))
             original_pixmap = original_pixmap.scaled(64, 64, Qt.KeepAspectRatio, Qt.SmoothTransformation)
             # Adjust the pixmap opacity
             adjusted_pixmap = self.set_pixmap_opacity(original_pixmap, opacity)
@@ -76,7 +76,7 @@ class OverlayWidget(QWidget):
             label.setPixmap(adjusted_pixmap)
 
     def update_icons(self, characters, characters_icons):
-        """Update the icons displayed in the overlay."""
+        """Update the characterIcons displayed in the overlay."""
         self.characters = characters
         self.characters_icons = characters_icons
         # Clear existing widgets
@@ -84,11 +84,11 @@ class OverlayWidget(QWidget):
             self.layout.removeWidget(label)
             label.deleteLater()
         self.icons_labels.clear()
-        # Add new icons
+        # Add new characterIcons
         for i, char in enumerate(self.characters):
             label = QLabel()
             # Get the original pixmap
-            original_pixmap = QPixmap(self.characters_icons.get(char, "gui/assets/icon_default.png"))
+            original_pixmap = QPixmap(self.characters_icons.get(char, resource_path("src/gui/assets/icon_default.png")))
             original_pixmap = original_pixmap.scaled(64, 64, Qt.KeepAspectRatio, Qt.SmoothTransformation)
             # Adjust the pixmap opacity
             opacity = 1.0 if i == self.current_index else 0.5
