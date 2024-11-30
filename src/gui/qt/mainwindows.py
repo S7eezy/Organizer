@@ -11,7 +11,7 @@
 from PySide6.QtCore import *
 from PySide6.QtGui import *
 from PySide6.QtWidgets import *
-from src.core.utils.resources import resource_path
+from core.utils.resources import resource_path, get_user_data_dir
 
 
 class Ui_MainWindow(object):
@@ -23,11 +23,11 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName(u"centralwidget")
         self.ui_console = QTextBrowser(self.centralwidget)
         self.ui_console.setObjectName(u"ui_console")
-        self.ui_console.setGeometry(QRect(30, 301, 401, 281))
+        self.ui_console.setGeometry(QRect(30, 381, 401, 201))
 
         ## Config - Labels
         x = 470
-        y = 320
+        y = 380
         s = 40
         self.ui_label_massclick = QLabel(self.centralwidget)
         self.ui_label_massclick.setObjectName(u"ui_label_massclick")
@@ -55,7 +55,7 @@ class Ui_MainWindow(object):
 
         ## Config - Buttons
         x = 580
-        y = 320
+        y = 380
         s = 40
         self.ui_btn_massclick = QPushButton(self.centralwidget)
         self.ui_btn_massclick.setObjectName(u"ui_btn_massclick")
@@ -112,13 +112,13 @@ class Ui_MainWindow(object):
 
         self.img_gif = QLabel(self.centralwidget)
         self.img_gif.setObjectName(u"img_gif")
-        self.img_gif.setGeometry(QRect(85, 260, 48, 48))
-        self.gifmovie = QMovie(resource_path("src/gui/assets/logos/gif.gif"))
+        self.img_gif.setGeometry(QRect(85, 340, 48, 48))
+        self.gifmovie = QMovie(resource_path("gui/assets/logos/gif.gif"))
 
         self.logo = QLabel(self.centralwidget)
         self.logo.setObjectName(u"logo")
         self.logo.setGeometry(QRect(20, 20, 250, 60))
-        self.logo.setPixmap(QPixmap(resource_path("src/gui/assets/logos/logomain.png")))
+        self.logo.setPixmap(QPixmap(resource_path("gui/assets/logos/logomain.png")))
 
         self.img_gif.setMovie(self.gifmovie)
         self.gifmovie.start()

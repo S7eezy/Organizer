@@ -5,6 +5,7 @@ import sys
 import datetime
 import re
 import ctypes
+import os
 
 ##################################################
 # External Libs
@@ -17,9 +18,9 @@ from PySide6.QtWidgets import *
 ##################################################
 # Project Libs
 ##################################################
-from src.gui.qt.mainwindows import Ui_MainWindow
-from src.core.organizer import Organizer
-from src.core.utils.resources import resource_path
+from gui.qt.mainwindows import Ui_MainWindow
+from core.organizer import Organizer
+from core.utils.resources import resource_path, get_user_data_dir, get_icons_dir
 
 
 ##################################################
@@ -181,7 +182,7 @@ class Tool(QMainWindow):
             label = f"char{self.CharIndex}_iconbtn"
             setattr(self.ui, label, QPushButton(self.ui.centralwidget))
             exec(f"self.ui.{label}.setObjectName(u'{label}')")
-            icon_path = self.Organizer.CharactersIcons.get(Char, "src/gui/assets/logos/icon_6464.png")
+            icon_path = self.Organizer.CharactersIcons.get(Char, "gui/assets/logos/icon_6464.png")
             exec(f"self.ui.{label}.setIcon(QIcon('{icon_path}'))")
             exec(f"self.ui.{label}.setIconSize(QSize(24, 24))")
             exec(f"self.ui.{label}.setGeometry(QRect(256, {begin + 40 * (self.CharIndex - 1)}, 31, 31))")
@@ -193,10 +194,10 @@ class Tool(QMainWindow):
             exec(f"self.ui.{label}.setObjectName(u'{label}')")
             exec(f"self.ui.{label}.setText(u'')")
             if self.CharIndex != 1:
-                exec(f"self.ui.{label}.setIcon(QIcon(resource_path('src/gui/assets/utils/up.png')))")
+                exec(f"self.ui.{label}.setIcon(QIcon(resource_path('gui/assets/utils/up.png')))")
                 exec(f"self.ui.{label}.clicked.connect(self.__HandleUiBtns)")
             else:
-                exec(f"self.ui.{label}.setIcon(QIcon(resource_path('src/gui/assets/utils/upgrey.png')))")
+                exec(f"self.ui.{label}.setIcon(QIcon(resource_path('gui/assets/utils/upgrey.png')))")
             exec(f"self.ui.{label}.setGeometry(QRect(440, {begin + 40 * (self.CharIndex -1)}, 31, 31))")
             exec(f"self.ui.{label}.show()")
 
@@ -205,10 +206,10 @@ class Tool(QMainWindow):
             exec(f"self.ui.{label}.setObjectName(u'{label}')")
             exec(f"self.ui.{label}.setText(u'')")
             if self.CharIndex != len(self.Organizer.Characters):
-                exec(f"self.ui.{label}.setIcon(QIcon(resource_path('src/gui/assets/utils/down.png')))")
+                exec(f"self.ui.{label}.setIcon(QIcon(resource_path('gui/assets/utils/down.png')))")
                 exec(f"self.ui.{label}.clicked.connect(self.__HandleUiBtns)")
             else:
-                exec(f"self.ui.{label}.setIcon(QIcon(resource_path('src/gui/assets/utils/downgrey.png')))")
+                exec(f"self.ui.{label}.setIcon(QIcon(resource_path('gui/assets/utils/downgrey.png')))")
             exec(f"self.ui.{label}.setGeometry(QRect(480, {begin + 40 * (self.CharIndex -1)}, 31, 31))")
             exec(f"self.ui.{label}.show()")
 
@@ -216,7 +217,7 @@ class Tool(QMainWindow):
             setattr(self.ui, label, QPushButton(self.ui.centralwidget))
             exec(f"self.ui.{label}.setObjectName(u'{label}')")
             exec(f"self.ui.{label}.setText(u'')")
-            exec(f"self.ui.{label}.setIcon(QIcon(resource_path('src/gui/assets/utils/trash.png')))")
+            exec(f"self.ui.{label}.setIcon(QIcon(resource_path('gui/assets/utils/trash.png')))")
             exec(f"self.ui.{label}.setGeometry(QRect(550, {begin + 40 * (self.CharIndex -1)}, 31, 31))")
             exec(f"self.ui.{label}.clicked.connect(self.__HandleUiBtns)")
             exec(f"self.ui.{label}.show()")
@@ -231,7 +232,7 @@ class Tool(QMainWindow):
         self.Organizer.Characters = Windows
         for char in Windows:
             if char not in self.Organizer.CharactersIcons:
-                self.Organizer.CharactersIcons[char] = resource_path("src/gui/assets/logos/icon_6464.png")
+                self.Organizer.CharactersIcons[char] = resource_path("gui/assets/logos/icon_6464.png")
         self.__CreateChar()
         self.overlay.update_icons(self.Organizer.Characters, self.Organizer.CharactersIcons)
 
@@ -267,20 +268,39 @@ class Tool(QMainWindow):
         char_idx = int(re.findall(r'\d+', sender.objectName())[0]) - 1
         char_name = self.Organizer.Characters[char_idx]
 
+        icons_dir = get_icons_dir()
+
         # Open file dialog to select an icon
-        icon_path, _ = QFileDialog.getOpenFileName(self, "Select Icon", resource_path("src/gui/assets/characterIcons"), "Images (*.png *.jpg *.bmp)")
+        icon_path, _ = QFileDialog.getOpenFileName(
+            self,
+            "Select Icon",
+            icons_dir,
+            "Images (*.png *.jpg *.bmp)"
+        )
+
         if icon_path:
+            # Ensure the icon is within the characterIcons directory
+            if not icon_path.startswith(icons_dir):
+                # Copy the icon to the characterIcons directory
+                icon_filename = os.path.basename(icon_path)
+                destination_path = os.path.join(icons_dir, icon_filename)
+                shutil.copyfile(icon_path, destination_path)
+                icon_path = destination_path
+
             # Update the icon button
             sender.setIcon(QIcon(icon_path))
             sender.setIconSize(QSize(24, 24))
-            # Update the organizer's character characterIcons
+
+            # Update the organizer's CharactersIcons with the relative path
+            relative_icon_path = os.path.relpath(icon_path, icons_dir)
+            self.Organizer.Config['CharactersIcons'][char_name] = relative_icon_path
             self.Organizer.CharactersIcons[char_name] = icon_path
+
             # Update the overlay
             self.overlay.update_icons(self.Organizer.Characters, self.Organizer.CharactersIcons)
-            self.__HandleTextBrowser("Blue", self.__TimedLog(f"Icône mise à jour:\n{char_name} -> {icon_path.split('/')[-1]}"))
-            # Optionally save config immediately
-            # self.__HandleCfgSave()
 
+            self.__HandleTextBrowser("Blue",
+                                     self.__TimedLog(f"Icône mise à jour:\n{char_name} -> {relative_icon_path}"))
 
     ##################################################
     # Remove Characters Components
@@ -325,13 +345,13 @@ class Tool(QMainWindow):
     def __HandleCfgStartStop(self):
         Status = self.Organizer.ManageKb()
         if Status:
-            self.ui.img_startstop.setPixmap(QPixmap(resource_path("src/gui/assets/utils/start.png")))
+            self.ui.img_startstop.setPixmap(QPixmap(resource_path("gui/assets/utils/start.png")))
             self.__HandleTextBrowser("Green", self.__TimedLog("Lancement d'organizer"))
             self.ui.ui_btn_startstop.setText("STOP")
             self.ui.img_startstop.show()
             self.overlay.show()
         else:
-            self.ui.img_startstop.setPixmap(QPixmap(resource_path("src/gui/assets/utils/stop.png")))
+            self.ui.img_startstop.setPixmap(QPixmap(resource_path("gui/assets/utils/stop.png")))
             self.__HandleTextBrowser("Red", self.__TimedLog("Arrêt d'organizer"))
             self.ui.ui_btn_startstop.setText("GO")
             self.ui.img_startstop.show()
@@ -354,17 +374,17 @@ class Tool(QMainWindow):
             setattr(self.ui, label, QPushButton(self.ui.centralwidget))
             exec(f"self.ui.{label}.setObjectName(u'{label}')")
             exec(f"self.ui.{label}.setText(u'')")
-            exec(f"self.ui.{label}.setIcon(QIcon(resource_path('src/gui/assets/utils/x1.png')))")
+            exec(f"self.ui.{label}.setIcon(QIcon(resource_path('gui/assets/utils/x1.png')))")
             exec(f"self.ui.{label}.clicked.connect(self.__HandleUiBtns)")
-            exec(f"self.ui.{label}.setGeometry(QRect(705, {320 + 40 * (keyIndex - 1)}, 31, 31))")
+            exec(f"self.ui.{label}.setGeometry(QRect(705, {380 + 40 * (keyIndex - 1)}, 31, 31))")
             exec(f"self.ui.{label}.show()")
             label = f"ui_x2_{key}"
             setattr(self.ui, label, QPushButton(self.ui.centralwidget))
             exec(f"self.ui.{label}.setObjectName(u'{label}')")
             exec(f"self.ui.{label}.setText(u'')")
-            exec(f"self.ui.{label}.setIcon(QIcon(resource_path('src/gui/assets/utils/x2.png')))")
+            exec(f"self.ui.{label}.setIcon(QIcon(resource_path('gui/assets/utils/x2.png')))")
             exec(f"self.ui.{label}.clicked.connect(self.__HandleUiBtns)")
-            exec(f"self.ui.{label}.setGeometry(QRect(670, {320 + 40 * (keyIndex - 1)}, 31, 31))")
+            exec(f"self.ui.{label}.setGeometry(QRect(670, {380 + 40 * (keyIndex - 1)}, 31, 31))")
             exec(f"self.ui.{label}.show()")
         self.ui.ui_btn_delay.setText(str(self.Organizer.delay))
 

@@ -5,7 +5,7 @@ import win32con as wcon
 import win32gui as wgui
 import win32process as wproc
 
-import src.core.utils.colors as CU
+import core.utils.colors as CU
 
 
 def enum_windows_proc(wnd, param):

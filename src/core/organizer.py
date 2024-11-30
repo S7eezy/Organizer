@@ -21,8 +21,8 @@ from PySide6.QtCore import QObject, Signal
 ##################################################
 # Project Libs
 ##################################################
-import src.core.utils.win_hook as CW
-from src.core.utils.resources import resource_path
+import core.utils.win_hook as CW
+from core.utils.resources import resource_path, get_user_data_dir, get_icons_dir
 
 
 ##################################################
@@ -107,48 +107,62 @@ class Organizer(QObject):
         self.GetCharacters()
         self.GetKeys()
 
-    def GetConfig(self, file=resource_path("config.json")):
+
+    def GetConfig(self):
+        user_data_dir = get_user_data_dir()
+        config_path = os.path.join(user_data_dir, 'config.json')
+
+        if not os.path.exists(config_path):
+            # If config doesn't exist in user data dir, copy the default config
+            self.copy_default_config(config_path)
+
         try:
-            with open(file, "r") as filehandler:
+            with open(config_path, "r") as filehandler:
                 self.Config = json.load(filehandler)
         except (json.JSONDecodeError, FileNotFoundError, PermissionError) as e:
             print(f"Error loading config: {e}")
             print("Loading default configuration.")
-
-            # Path to default config
-            default_config_path = resource_path("src/core/utils/default.json")
-
-            # Check if default config exists
-            if not os.path.exists(default_config_path):
-                print("Default configuration file not found.")
-                # Handle the absence of default.json appropriately
-                self.Config = {}  # Or set to some default dict
-                return
-
-            # Load default config
-            with open(default_config_path, "r") as filehandler:
+            self.copy_default_config(config_path)
+            # Load the default config
+            with open(config_path, "r") as filehandler:
                 self.Config = json.load(filehandler)
 
-            # Replace the corrupted main config with default config
-            try:
-                shutil.copyfile(default_config_path, file)
-                print("Replaced corrupted config with default config.")
-            except Exception as copy_exception:
-                print(f"Error replacing config file: {copy_exception}")
+    def SetConfig(self, data=None):
+        user_data_dir = get_user_data_dir()
+        config_path = os.path.join(user_data_dir, 'config.json')
 
+        # Ensure the user data directory exists
+        os.makedirs(user_data_dir, exist_ok=True)
 
-    @staticmethod
-    def SetConfig(file=resource_path("config.json"), data=None):
-        with open(file, "w+") as filehandler:
+        with open(config_path, "w") as filehandler:
             if data:
-                json.dump(data, filehandler)
+                json.dump(data, filehandler, indent=4)
+
+    def copy_default_config(self, config_path):
+        user_data_dir = get_user_data_dir()
+        # Ensure the user data directory exists
+        os.makedirs(user_data_dir, exist_ok=True)
+
+        default_config_path = resource_path("core/utils/default.json")
+
+        # Copy the default config to the user data directory
+        shutil.copyfile(default_config_path, config_path)
 
     def GetCharacters(self):
         Characters = []
+        icons_dir = get_icons_dir()
         for key in self.Config["Characters"]:
             Characters.append(key)
-            icon = self.Config.get("CharactersIcons", {}).get(key, resource_path("src/gui/assets/logos/icon_6464.png"))
-            self.CharactersIcons[key] = icon
+            icon_relative_path = self.Config.get("CharactersIcons", {}).get(key, None)
+            if icon_relative_path:
+                icon_path = os.path.join(icons_dir, icon_relative_path)
+                if not os.path.exists(icon_path):
+                    # If the icon file doesn't exist, use default icon
+                    icon_path = resource_path('gui/assets/logos/icon_6464.png')
+            else:
+                # Use default icon
+                icon_path = resource_path('gui/assets/logos/icon_6464.png')
+            self.CharactersIcons[key] = icon_path
         self.Characters = Characters
 
     def GetKeys(self):

@@ -3,7 +3,8 @@ import ctypes
 from PySide6.QtGui import QPainter, QPixmap, QColor
 from PySide6.QtWidgets import QWidget, QHBoxLayout, QLabel, QApplication
 from PySide6.QtCore import Qt, QTimer, QSize, QPoint
-from src.core.utils.resources import resource_path
+from core.utils.resources import resource_path, get_user_data_dir, get_icons_dir
+
 
 class OverlayWidget(QWidget):
     def __init__(self, characters, characters_icons, current_index):
@@ -30,7 +31,7 @@ class OverlayWidget(QWidget):
         self.icons_labels = []
         for i, char in enumerate(self.characters):
             label = QLabel()
-            pixmap = QPixmap(self.characters_icons.get(char, resource_path("src/gui/assets/icon_default.png")))
+            pixmap = QPixmap(self.characters_icons.get(char, resource_path("gui/assets/logos/icon_6464.png")))
             pixmap = pixmap.scaled(64, 64, Qt.KeepAspectRatio, Qt.SmoothTransformation)
             label.setPixmap(pixmap)
             self.layout.addWidget(label)
@@ -68,7 +69,7 @@ class OverlayWidget(QWidget):
         for i, label in enumerate(self.icons_labels):
             opacity = 1.0 if i == focused_index else .5  # 0.2 for very low opacity
             # Get the original pixmap
-            original_pixmap = QPixmap(self.characters_icons.get(self.characters[i], resource_path("src/gui/assets/icon_default.png")))
+            original_pixmap = QPixmap(self.characters_icons.get(self.characters[i], resource_path("gui/assets/logos/icon_6464.png")))
             original_pixmap = original_pixmap.scaled(64, 64, Qt.KeepAspectRatio, Qt.SmoothTransformation)
             # Adjust the pixmap opacity
             adjusted_pixmap = self.set_pixmap_opacity(original_pixmap, opacity)
@@ -88,7 +89,7 @@ class OverlayWidget(QWidget):
         for i, char in enumerate(self.characters):
             label = QLabel()
             # Get the original pixmap
-            original_pixmap = QPixmap(self.characters_icons.get(char, resource_path("src/gui/assets/icon_default.png")))
+            original_pixmap = QPixmap(self.characters_icons.get(char, resource_path("gui/assets/logos/icon_6464.png")))
             original_pixmap = original_pixmap.scaled(64, 64, Qt.KeepAspectRatio, Qt.SmoothTransformation)
             # Adjust the pixmap opacity
             opacity = 1.0 if i == self.current_index else 0.5

@@ -12,19 +12,25 @@
 # ╚█████╔╝██║░░██║╚██████╔╝██║░░██║██║░╚███║██║███████╗███████╗██║░░██║
 # ░╚════╝░╚═╝░░╚═╝░╚═════╝░╚═╝░░╚═╝╚═╝░░╚══╝╚═╝╚══════╝╚══════╝╚═╝░░╚═╝
 
-from src.core.organizer import Organizer
-from src.core.utils.resources import resource_path
-from PySide6.QtWidgets import QApplication
-from src.gui.tool import Tool
-from src.gui.overlay import OverlayWidget
 import sys
+import os
+
+# Add the directory containing main.pyw to sys.path
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+from PySide6.QtWidgets import QApplication
+from core.organizer import Organizer
+from core.utils.resources import resource_path, get_user_data_dir, get_icons_dir
+from gui.tool import Tool
+from gui.overlay import OverlayWidget
+
 
 if __name__ == '__main__':
     Organizer = Organizer()
 
     app = QApplication(sys.argv)
 
-    with open(resource_path('src/gui/style/stylesheet.qss'), 'r') as f:
+    with open(resource_path('gui/style/stylesheet.qss'), 'r') as f:
         style = f.read()
 
     app.setStyleSheet(style)
