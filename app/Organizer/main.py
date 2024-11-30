@@ -163,6 +163,7 @@ class Organizer:
             elif action == "click":
                 self.Mouse.position = position
                 self.Mouse.press(Button.left)
+                time.sleep(self.delay / 2000)
                 self.Mouse.release(Button.left)
                 time.sleep(self.delay / 1000)
         self.__IncrementIndex()

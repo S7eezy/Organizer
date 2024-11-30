@@ -4,3 +4,4 @@ keyboard
 colorama
 pynput
 pywin32
+pyperclip
